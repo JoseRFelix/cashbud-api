@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# frozen_string_literal: true
+
+docker-compose up -d
+air
