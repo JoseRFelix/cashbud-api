@@ -7,6 +7,8 @@ import (
 
 	"github.com/JoseRFelix/cashbud-api/app/accounts"
 	"github.com/JoseRFelix/cashbud-api/app/common"
+	"github.com/JoseRFelix/cashbud-api/app/users"
+	"github.com/urfave/negroni"
 
 	"github.com/gorilla/mux"
 )
@@ -27,8 +29,12 @@ func main() {
 	router.HandleFunc("/status", healthCheck)
 
 	accounts.AccountRoutes(router)
+	users.UsersRoutes(router)
 
-	port := "8080"
+	negroni := negroni.Classic()
+	negroni.UseHandler(router)
+
+	port := common.GetEnvironmentVariable("PORT")
 	fmt.Println("Server started on port", port)
-	log.Fatal(http.ListenAndServe(":"+port, router))
+	log.Fatal(http.ListenAndServe(":"+port, negroni))
 }
